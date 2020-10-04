@@ -13,10 +13,10 @@ So a neat feature of OpenCore is the ability to avoid the BIOS entirely and use 
 
 To start we'll need the following:
 
-* Windows already installed
+* Windows and macOS already installed
   * MUST be UEFI/GPT based
-* [Brigadier](https://github.com/corpnewt/brigadier)
-  * To download the BootCamp drivers
+* A shared storage (must be 2GB free or more) (ex: a USB) with a filesystem (ex: exFAT) supported and can be discovered by both Windows and macOS
+  * To store the downloaded BootCamp drivers
 * SMBIOS injection enabled
   * As the drivers have a SMBIOS check
 * Setup [Bootstrap.efi](../multiboot/bootstrap.md)
@@ -24,39 +24,17 @@ To start we'll need the following:
 
 ## Installation
 
-To install, it's as simple as grabbing [Brigadier](https://github.com/corpnewt/brigadier) and running either `Brigadier.bat` for Windows or `Brigadier.command` for macOS. If the SMBIOS you're currently using either has BootCamp issues or want to download for another SMBIOS, you can add `--  model{SMBIOS}` to the end:
+First, open Boot Camp Assistant. Then, in the menu bar, select Action, Download Windows support software.
 
-```sh
-path/to/Brigadier --model MacPro7,1
-```
+In the "Save" window that appears, change the "Where" option to your shared storage.
 
-* **Note**: Older versions of the BootCamp installer(6.0) do not support APFS, you'll need to either choose a newer SMBIOS that would have it bundled(ie. iMac 19,1) or after installation update your bootcamp software. See below for more details on troubleshooting: [Windows Startup Disk can't see APFS drives](#windows-startup-disk-cant-see-apfs-drives)
+![][../images/bootcamp-md/savewindow.png]
 
-![](../images/bootcamp-md/extension.png)
+Next, click on the Save button and wait for the Boot Camp software to download.
 
-Next you will find our bootcamp drivers under either:
+After that, boot to your Windows installation, log in and open the Setup.exe in <your shared storage drive letter>\WindowsSupport
 
-* Windows:
-
-```sh
-\Users\{Username}\bootcamp-{filename}\BootCamp
-```
-
-* macOS:
-
-```sh
-/Users/{Username}/BootCamp-{filename}/WindowsSupport.dmg
-```
-
-macOS users will next need to expand WindowsSupport.dmg and place it somewhere Windows can get.
-
-![](../images/bootcamp-md/done.png)
-
-Next navigate to the `bootcamp-{filename}\BootCamp` folder and run the Setup.exe:
-
-![](../images/bootcamp-md/location.png)
-
-Once all is finished, you now have BootCamp switching! There should be a little BootCamp icon in you tray now that you can select which drive to boot to.
+Follow the instructions on the screen and once all is finished, you now have BootCamp switching! There should be a little BootCamp icon in you tray now that you can select which drive to boot to.
 
 * Note: For those no needing the extra drivers BootCamp provides, you can delete the following:
   * `$WinPEDriver$`: **DO NOT** delete the folder itself, just the drivers inside
@@ -130,7 +108,7 @@ This is due to OpenCore getting confused when trying to boot Windows and acciden
 
 ## Windows Startup Disk can't see APFS drives
 
-* Outdated BootCamp drivers(generally ver 6.0 will come with brigadier, BootCamp Utility in macOS provides newer version like ver 6.1). You can try to alleviate these issues by either updating to the newest release with Apple's software updater or selecting a newer SMBIOS from brigadier(ie. `--model iMac19,1`) and when running brigadier.
+* The reason behind this is because your Boot Camp support software is too old.
 
 For the latter, you'll need to run the following(replace `filename.msi` with the BootCamp installation msi):
 
